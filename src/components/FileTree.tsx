@@ -109,8 +109,7 @@ export const FileTree: React.FC<FileTreeProps> = React.memo(({ root }) => {
     if (root.loadChildren) {
       loadNodeChildren(root);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [root.id]); // Only depend on root.id to run once per root change
+  }, [root.id, root.loadChildren, loadNodeChildren]);
 
   // Recursive render function
   const renderNode = useCallback(

@@ -1,3 +1,4 @@
+import { useMemo, useCallback } from "react";
 import { FileTree } from "./components/FileTree";
 import type { FileNode } from "./types/fileTree";
 import { fetchFakeFiles } from "./services/fakeFileService";
@@ -5,13 +6,19 @@ import { Box, Paper } from "@mui/material";
 import "./App.css";
 
 function App() {
-  // Create root folder that loads children async
-  const rootNode: FileNode = {
-    id: "root",
-    name: "liable-owl",
-    type: "folder",
-    loadChildren: () => fetchFakeFiles("root"),
-  };
+  // Memoize loadChildren function to prevent recreation on every render
+  const loadRootChildren = useCallback(() => fetchFakeFiles("root"), []);
+
+  // Memoize root folder to prevent recreation on every render
+  const rootNode: FileNode = useMemo(
+    () => ({
+      id: "root",
+      name: "liable-owl",
+      type: "folder",
+      loadChildren: loadRootChildren,
+    }),
+    [loadRootChildren]
+  );
 
   return (
     <Box

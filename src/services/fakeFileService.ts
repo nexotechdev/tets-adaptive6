@@ -1,5 +1,27 @@
 import type { FileNode } from "../types/fileTree";
 
+// Constants for random file/folder generation
+const FILE_NAMES = [
+  "document.pdf",
+  "image.png",
+  "video.mp4",
+  "script.js",
+  "style.css",
+  "readme.txt",
+  "config.json",
+  "data.csv",
+] as const;
+
+const FOLDER_NAMES = [
+  "Documents",
+  "Images",
+  "Videos",
+  "Projects",
+  "Downloads",
+] as const;
+
+const NETWORK_DELAY_MS = 1000;
+
 /**
  * Fake async file fetch service that simulates loading files from a server
  * Returns the exact files and folders shown in the screenshots
@@ -7,8 +29,8 @@ import type { FileNode } from "../types/fileTree";
  * @returns Promise that resolves to an array of FileNode children
  */
 export async function fetchFakeFiles(parentId: string): Promise<FileNode[]> {
-  // Wait 1 second to simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // Wait to simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, NETWORK_DELAY_MS));
 
   const children: FileNode[] = [];
 
@@ -92,30 +114,11 @@ export async function fetchFakeFiles(parentId: string): Promise<FileNode[]> {
   else {
     const numChildren = Math.floor(Math.random() * 4) + 1;
 
-    const fileNames = [
-      "document.pdf",
-      "image.png",
-      "video.mp4",
-      "script.js",
-      "style.css",
-      "readme.txt",
-      "config.json",
-      "data.csv",
-    ];
-
-    const folderNames = [
-      "Documents",
-      "Images",
-      "Videos",
-      "Projects",
-      "Downloads",
-    ];
-
     for (let i = 0; i < numChildren; i++) {
       const isFolder = Math.random() > 0.5;
       const name = isFolder
-        ? folderNames[Math.floor(Math.random() * folderNames.length)]
-        : fileNames[Math.floor(Math.random() * fileNames.length)];
+        ? FOLDER_NAMES[Math.floor(Math.random() * FOLDER_NAMES.length)]
+        : FILE_NAMES[Math.floor(Math.random() * FILE_NAMES.length)];
 
       const child: FileNode = {
         id: `${parentId}-${i}`,
